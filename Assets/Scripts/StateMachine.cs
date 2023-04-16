@@ -20,7 +20,7 @@ public class StateMachine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        lastPosition = transform.Position;
+        lastPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -38,20 +38,19 @@ public class StateMachine : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if(other.name == "Water")
         {
-            Swimming();
+            currentState = State.swimming;
         }
         else if(other.name == "RockTrigger")
         {
-            Climbing();
+            currentState = State.climbing;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-
+        currentState = State.walking;
     }
 
     void Swimming()
@@ -69,7 +68,7 @@ public class StateMachine : MonoBehaviour
         Debug.Log("I am idle.");
         if(lastPosition != transform.position)
         {
-            Debug.Log("I'm moving...!");
+            currentState = State.walking;
         }
         lastPosition = transform.position;
     }
@@ -77,5 +76,10 @@ public class StateMachine : MonoBehaviour
     void Walking()
     {
         Debug.Log("I am walking.");
+        if (lastPosition == transform.position)
+        {
+            currentState = State.idle;
+        }
+        lastPosition = transform.position;
     }
 }
